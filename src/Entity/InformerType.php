@@ -29,12 +29,12 @@ class InformerType
     /**
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private $sort = 100;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -44,17 +44,17 @@ class InformerType
     /**
      * @ORM\Column(type="boolean")
      */
-    private $blockUserCreate;
+    private $blockUserCreate = true;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $blockUserDelete;
+    private $blockUserDelete = true;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $blockUserDeactivate;
+    private $blockUserDeactivate = true;
 
     /**
      * @ORM\Column(type="json", nullable=true)

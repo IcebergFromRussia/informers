@@ -31,7 +31,7 @@ class ServiceDataType
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -39,14 +39,9 @@ class ServiceDataType
     private $keyFieldRegex;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $ыщке;
-
-    /**
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private $sort = 100;
 
     /**
      * @ORM\Column(type="json", nullable=true)
@@ -147,18 +142,6 @@ class ServiceDataType
     public function setKeyFieldRegex(?string $keyFieldRegex): self
     {
         $this->keyFieldRegex = $keyFieldRegex;
-
-        return $this;
-    }
-
-    public function getыщке(): ?string
-    {
-        return $this->ыщке;
-    }
-
-    public function setыщке(string $ыщке): self
-    {
-        $this->ыщке = $ыщке;
 
         return $this;
     }

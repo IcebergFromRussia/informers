@@ -34,7 +34,7 @@ class Informer
     /**
      * @ORM\Column(type="integer")
      */
-    private $notificationCount;
+    private $notificationCount = 0;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -49,7 +49,7 @@ class Informer
     /**
      * @ORM\Column(type="integer")
      */
-    private $sort;
+    private $sort = 100;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -87,6 +87,12 @@ class Informer
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $userChanged;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\InformerType")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $type;
 
     public function getId(): ?int
     {
@@ -257,6 +263,18 @@ class Informer
     public function setUserChanged(?User $userChanged): self
     {
         $this->userChanged = $userChanged;
+
+        return $this;
+    }
+
+    public function getType(): ?InformerType
+    {
+        return $this->type;
+    }
+
+    public function setType(?InformerType $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

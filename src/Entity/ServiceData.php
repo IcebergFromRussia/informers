@@ -13,8 +13,8 @@ class ServiceData
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
      */
     private $id;
 
@@ -40,16 +40,18 @@ class ServiceData
     private $data = [];
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", options={"default"=100})
      */
-    private $sort;
+    private $sort = 100;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
@@ -65,12 +67,14 @@ class ServiceData
     private $informers;
 
     /**
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
     private $userCreated;
 
     /**
+     * @var User
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      */
     private $userChanged;
