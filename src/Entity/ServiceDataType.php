@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Swagger\Annotations as SWG;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ServiceDataTypeRepository")
@@ -15,6 +17,7 @@ class ServiceDataType
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @SWG\Property(description="The unique identifier of the user.", readOnly=true)
      */
     private $id;
 
@@ -25,6 +28,7 @@ class ServiceDataType
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @SWG\Property(description="Название типа услуги")
      */
     private $name;
 
@@ -56,41 +60,40 @@ class ServiceDataType
     /**
      * @ORM\Column(type="boolean")
      */
-    private $blockUserCreate;
+    private $blockUserCreate = true;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $blockUserDelete;
+    private $blockUserDelete = true;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $blockUserDeactivate;
+    private $blockUserDeactivate = true;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     * @SWG\Property(description="Дата создания", readOnly=true)
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     * @SWG\Property(description="Дата обновления", readOnly=true)
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @SWG\Property(description="Дата удаления", readOnly=true)
      */
     private $deletedAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ServiceData", mappedBy="type")
-     */
-    private $serviceData;
-
     public function __construct()
     {
-        $this->serviceData = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -254,34 +257,4 @@ class ServiceDataType
         return $this;
     }
 
-    /**
-     * @return Collection|ServiceData[]
-     */
-    public function getServiceData(): Collection
-    {
-        return $this->serviceData;
-    }
-
-    public function addServiceData(ServiceData $serviceData): self
-    {
-        if (!$this->serviceData->contains($serviceData)) {
-            $this->serviceData[] = $serviceData;
-            $serviceData->setType($this);
-        }
-
-        return $this;
-    }
-
-    public function removeServiceData(ServiceData $serviceData): self
-    {
-        if ($this->serviceData->contains($serviceData)) {
-            $this->serviceData->removeElement($serviceData);
-            // set the owning side to null (unless already changed)
-            if ($serviceData->getType() === $this) {
-                $serviceData->setType(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -30,3 +30,6 @@ services:
         arguments:
             $producer: '@old_sound_rabbit_mq.upload_picture_producer'
 
+    sensio_framework_extra.view.listener:
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+

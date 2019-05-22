@@ -1,3 +1,22 @@
 #index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+#  path: /
+#  controller: App\Controller\DefaultController::index
+
+
+app.swagger_ui:
+  path: /api/doc
+  methods: GET
+  defaults: { _controller: nelmio_api_doc.controller.swagger_ui }
+
+api:
+  path: /api
+  controller: App\Controller\InformerApiController::index
+
+informers:
+  type:     rest
+  #  host:     m.example.com
+  resource: App\Controller\InformersController
+service_data_type:
+  type:     rest
+  #  host:     m.example.com
+  resource: App\Controller\ServiceDataTypeController
