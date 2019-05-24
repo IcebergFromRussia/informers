@@ -3,6 +3,10 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Swagger\Annotations as SWG;
+use Gedmo\Mapping\Annotation as Gedmo;
+use JMS\Serializer\Annotation\ReadOnly;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InformerTypeRepository")
@@ -13,6 +17,7 @@ class InformerType
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @SWG\Property(description="The unique identifier of the user.", readOnly=true)
      */
     private $id;
 
@@ -58,26 +63,33 @@ class InformerType
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Serializer\Type("array")
      */
     private $dataSchema = [];
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Serializer\Type("array")
      */
     private $serviceDataValidation = [];
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     * @SWG\Property(description="дата создания", readOnly=true)
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="update")
+     * @SWG\Property(description="дата создания", readOnly=true)
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @SWG\Property(description="дата создания", readOnly=true)
      */
     private $deletedAt;
 

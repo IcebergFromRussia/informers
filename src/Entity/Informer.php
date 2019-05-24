@@ -4,6 +4,11 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+use Swagger\Annotations as SWG;
+use JMS\Serializer\Annotation\ReadOnly;
+use JMS\Serializer\Annotation as Serializer;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InformerRepository")
  */
@@ -13,6 +18,7 @@ class Informer
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @SWG\Property(description="The unique identifier of the user.", readOnly=true)
      */
     private $id;
 
@@ -42,9 +48,10 @@ class Informer
     private $key;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json", length=255)
+     * @Serializer\Type("array")
      */
-    private $data;
+    private $data = [];
 
     /**
      * @ORM\Column(type="integer")
@@ -53,6 +60,8 @@ class Informer
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="create")
+     * @SWG\Property(description="дата создания", readOnly=true)
      */
     private $createdAt;
 
@@ -62,35 +71,46 @@ class Informer
     private $actualizedAt;
 
     /**
+     * @Gedmo\Timestampable(on="update")
+     * @SWG\Property(description="дата изменения", readOnly=true)
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @SWG\Property(description="дата удаления", readOnly=true)
      */
     private $deletedAt;
 
     /**
+     * @var ServiceData
      * @ORM\ManyToOne(targetEntity="App\Entity\ServiceData", inversedBy="informers")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Type("integer")
+     * @Serializer\Accessor(getter="getServiceDataId")
      */
     private $serviceData;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Exclude()
      */
     private $userCreated;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users")
+     * @Serializer\Exclude()
      */
     private $userChanged;
 
     /**
+     * @var InformerType
      * @ORM\ManyToOne(targetEntity="App\Entity\InformerType")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Type("integer")
+     * @Serializer\Accessor(getter="getTypeId")
      */
     private $type;
 
@@ -99,16 +119,17 @@ class Informer
         return $this->id;
     }
 
-    public function getServiceData(): ?string
+    public function getServiceData()
     {
         return $this->serviceData;
     }
 
-    public function setServiceData(string $serviceData): self
+    /**
+     * @param ServiceData $serviceData
+     */
+    public function setServiceData(ServiceData $serviceData): void
     {
         $this->serviceData = $serviceData;
-
-        return $this;
     }
 
     public function getStatus(): ?string
@@ -243,31 +264,31 @@ class Informer
         return $this;
     }
 
-    public function getUserCreated(): ?User
+    public function getUserCreated(): ?Users
     {
         return $this->userCreated;
     }
 
-    public function setUserCreated(?User $userCreated): self
+    public function setUserCreated(?Users $userCreated): self
     {
         $this->userCreated = $userCreated;
 
         return $this;
     }
 
-    public function getUserChanged(): ?User
+    public function getUserChanged(): ?Users
     {
         return $this->userChanged;
     }
 
-    public function setUserChanged(?User $userChanged): self
+    public function setUserChanged(?Users $userChanged): self
     {
         $this->userChanged = $userChanged;
 
         return $this;
     }
 
-    public function getType(): ?InformerType
+    public function getType()
     {
         return $this->type;
     }
@@ -277,5 +298,17 @@ class Informer
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * необходим при сериализации объекта
+     * @return int|null
+     */
+    public function getTypeId(){
+        return $this->type->getId();
+    }
+
+    public function getServiceDataId(){
+        return $this->serviceData->getId();
     }
 }
