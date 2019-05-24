@@ -37,6 +37,8 @@ class ServiceDataTypeController extends AbstractFOSRestController
      * )
      * @ParamConverter("serviceDataType", converter="fos_rest.request_body")
      *
+     * @param ServiceDataType $serviceDataType
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function postAction(ServiceDataType $serviceDataType){
 
@@ -51,6 +53,39 @@ class ServiceDataTypeController extends AbstractFOSRestController
         ];
         $view = $this->view($data, 200);
         return $this->handleView($view);
+    }
 
+    /**
+     * @SWG\Tag(name="ServiceDataType")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Список типов услуги",
+     *     @SWG\Schema(
+     *         type="array",
+     *         @SWG\Items(ref=@Model(type=ServiceDataType::class))
+     *     )
+     * )
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getListAction(){
+        $types = $this->getDoctrine()->getRepository(ServiceDataType::class)->findAll();
+        $view = $this->view($types, 200);
+        return $this->handleView($view);
+    }
+
+    /**
+     * @SWG\Tag(name="ServiceDataType")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Тип услуги",
+     *     @Model(type=ServiceDataType::class)
+     * )
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getAction($id){
+        $types = $this->getDoctrine()->getRepository(ServiceDataType::class)->find($id);
+        $view = $this->view($types, 200);
+        return $this->handleView($view);
     }
 }

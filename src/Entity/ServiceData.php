@@ -6,16 +6,21 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Swagger\Annotations as SWG;
+use JMS\Serializer\Annotation\ReadOnly;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ServiceDataRepository")
+ *
  */
 class ServiceData
 {
     /**
      * @ORM\Id()
-     * @ORM\GeneratedValue(strategy="UUID")
-     * @ORM\Column(type="guid")
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue()
+     * @SWG\Property(description="The unique identifier of the user.", readOnly=true)
      */
     private $id;
 
@@ -25,8 +30,11 @@ class ServiceData
     private $name;
 
     /**
+     * @var ServiceDataType
      * @ORM\ManyToOne(targetEntity="App\Entity\ServiceDataType", inversedBy="serviceData")
      * @ORM\JoinColumn(nullable=false)
+     * @Serializer\Type("integer")
+     * @Serializer\Accessor(getter="getTypeId")
      */
     private $type;
 
@@ -37,6 +45,7 @@ class ServiceData
 
     /**
      * @ORM\Column(type="json", nullable=true)
+     * @Serializer\Type("array")
      */
     private $data = [];
 
@@ -48,35 +57,44 @@ class ServiceData
     /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime", nullable=true)
+     * @SWG\Property(description="дата создания", readOnly=true)
      */
     private $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime", nullable=true)
+     * @SWG\Property(description="дата изменения", readOnly=true)
      */
     private $updatedAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @SWG\Property(description="дата удаления", readOnly=true)
      */
     private $deletedAt;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Informer", mappedBy="serviceData", orphanRemoval=true)
+     * @SWG\Property(description="информеры", readOnly=true)
+     * @Serializer\Exclude()
      */
     private $informers;
 
     /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @var Users
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users")
      * @ORM\JoinColumn(nullable=false)
+     * @SWG\Property(description="кто создал", readOnly=true)
+     * @Serializer\Exclude()
      */
     private $userCreated;
 
     /**
-     * @var User
-     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @var Users
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users")
+     * @SWG\Property(description="пользователь изменил", readOnly=true)
+     * @Serializer\Exclude()
      */
     private $userChanged;
 
@@ -102,7 +120,7 @@ class ServiceData
         return $this;
     }
 
-    public function getType(): ?ServiceDataType
+    public function getType()
     {
         return $this->type;
     }
@@ -217,27 +235,35 @@ class ServiceData
         return $this;
     }
 
-    public function getUserCreated(): ?User
+    public function getUserCreated(): ?Users
     {
         return $this->userCreated;
     }
 
-    public function setUserCreated(?User $userCreated): self
+    public function setUserCreated(?Users $userCreated): self
     {
         $this->userCreated = $userCreated;
 
         return $this;
     }
 
-    public function getUserChanged(): ?User
+    public function getUserChanged(): ?Users
     {
         return $this->userChanged;
     }
 
-    public function setUserChanged(?User $userChanged): self
+    public function setUserChanged(?Users $userChanged): self
     {
         $this->userChanged = $userChanged;
 
         return $this;
+    }
+
+    /**
+     * необходим при сериализации объекта
+     * @return int|null
+     */
+    public function getTypeId(){
+        return $this->type->getId();
     }
 }

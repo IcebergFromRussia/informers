@@ -18,5 +18,7 @@ fos_rest:
     format_listener:
         rules:
             - { path: ^/api, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
-            - { path: ^/informers, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
+            - { path: ^/informer, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
+            - { path: ^/informertype, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
             - { path: ^/servicedatatype, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }
+            - { path: ^/servicedata, prefer_extension: true, fallback_format: json, priorities: [ json, html ] }

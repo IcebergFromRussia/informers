@@ -32,4 +32,7 @@ services:
 
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+#    App\Service\UserService:
+#        arguments:
+#            - '@doctrine.orm.default_entity_manager'
 

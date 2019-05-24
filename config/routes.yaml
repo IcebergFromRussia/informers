@@ -12,11 +12,18 @@ api:
   path: /api
   controller: App\Controller\InformerApiController::index
 
-informers:
+informer:
   type:     rest
-  #  host:     m.example.com
-  resource: App\Controller\InformersController
+  resource: App\Controller\InformerController
+
 service_data_type:
   type:     rest
-  #  host:     m.example.com
   resource: App\Controller\ServiceDataTypeController
+
+service_data:
+  type:     rest
+  resource: App\Controller\ServiceDataController
+
+informer_type:
+  type:     rest
+  resource: App\Controller\InformerTypeController
