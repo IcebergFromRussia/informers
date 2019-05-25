@@ -9,11 +9,21 @@
 namespace App\Consumer;
 
 
+use App\Service\RabbitService;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class MailSenderConsumer implements ConsumerInterface
 {
+    /**
+     * @var RabbitService
+     */
+    private $rabbitService;
+
+    public function __construct(RabbitService $rabbitService)
+    {
+        $this->rabbitService = $rabbitService;
+    }
 
     /**
      * @param AMQPMessage $msg The message
@@ -21,13 +31,7 @@ class MailSenderConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
-        $json = json_decode($msg->getBody());
-        var_dump($json);
-        var_dump($msg->getBody());
-
-        foreach ($json as $element){
-            echo $element.PHP_EOL;
-        }
+        $this->rabbitService->parseMassageFromRabbit($msg);
 //        // TODO: Implement execute() method.
 //        echo 'Ну тут типа сообщение пытаюсь отправить: '.$msg->getBody().PHP_EOL;
 //        echo 'Отправлено успешно!...';

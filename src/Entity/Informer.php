@@ -48,6 +48,7 @@ class Informer
     private $key;
 
     /**
+     * @var array
      * @ORM\Column(type="json", length=255)
      * @Serializer\Type("array")
      */
@@ -192,12 +193,12 @@ class Informer
         return $this;
     }
 
-    public function getData(): ?string
+    public function getData(): ?array
     {
         return $this->data;
     }
 
-    public function setData(string $data): self
+    public function setData(array $data): self
     {
         $this->data = $data;
 

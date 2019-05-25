@@ -14,6 +14,7 @@ use App\Entity\InformerType;
 use App\Entity\ServiceData;
 use App\Entity\ServiceDataType;
 use App\Entity\Users;
+use App\Service\RabbitService;
 use App\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 
@@ -32,11 +33,16 @@ class InformerController extends AbstractFOSRestController
      * @var UserService
      */
     private $userService;
+    /**
+     * @var RabbitService
+     */
+    private $rabbitService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, RabbitService $rabbitService)
     {
 
         $this->userService = $userService;
+        $this->rabbitService = $rabbitService;
     }
 
     /**
@@ -123,4 +129,30 @@ class InformerController extends AbstractFOSRestController
         return $this->handleView($view);
     }
 
+    /**
+     * @SWG\Tag(name="Informer")
+     * @SWG\Response(
+     *     response=200,
+     *     description="обновить информер",
+     * )
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getUpdateAction($id){
+        /**
+         * @var Informer $informer
+         */
+        $informer = $this->getDoctrine()->getRepository(Informer::class)->find($id);
+        $this->rabbitService->updateInformer($informer);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($informer);
+        $entityManager->flush();
+
+        $data = [
+            'massage' => 'id:' . $informer->getId() . ' поставлен на обновление',
+        ];
+        $view = $this->view($data, 200);
+        return $this->handleView($view);
+    }
 }
