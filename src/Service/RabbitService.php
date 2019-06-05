@@ -48,7 +48,7 @@ class RabbitService
         $this->entityManager = $entityManager;
     }
 
-    public function updateInformer(Informer $informer)
+    public function sendMessageToUpdateInformer(Informer $informer)
     {
         $data = [
             'task'=>'updateInformer',
@@ -63,20 +63,15 @@ class RabbitService
     /**
      * @param AMQPMessage $msg
      */
-    public function parseMassageFromRabbit(AMQPMessage $msg){
+    public function updateInformer(AMQPMessage $msg){
         $json = json_decode($msg->getBody(), true);
 
-        switch ($json['task']) {
-            case 'updateInformer':
-                $informer = $this->informerRepository->find($json['info']['id']);
-                $this->updater->updateInformer($informer);
-                try {
-                    $this->entityManager->persist($informer);
-                    $this->entityManager->flush();
-                } catch (ORMException $e) {
-                }
-                break;
-
+        $informer = $this->informerRepository->find($json['info']['id']);
+        $this->updater->updateInformer($informer);
+        try {
+            $this->entityManager->persist($informer);
+            $this->entityManager->flush();
+        } catch (ORMException $e) {
         }
     }
 }

@@ -9,7 +9,6 @@
 namespace App\Command;
 
 
-use App\Consumer\MailSenderConsumer;
 use OldSound\RabbitMqBundle\RabbitMq\Producer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -143,7 +143,7 @@ class InformerController extends AbstractFOSRestController
          * @var Informer $informer
          */
         $informer = $this->getDoctrine()->getRepository(Informer::class)->find($id);
-        $this->rabbitService->updateInformer($informer);
+        $this->rabbitService->sendMessageToUpdateInformer($informer);
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($informer);

@@ -39,6 +39,7 @@ class ServiceData
     private $type;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $key;
