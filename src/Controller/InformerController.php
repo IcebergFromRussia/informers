@@ -23,6 +23,7 @@ use Nelmio\ApiDocBundle\Annotation\Security;
 use Swagger\Annotations as SWG;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * @RouteResource("Informer", pluralize=false)
@@ -61,9 +62,19 @@ class InformerController extends AbstractFOSRestController
      * @ParamConverter("informer", converter="fos_rest.request_body")
      *
      * @param Informer $informer
+     * @param ConstraintViolationListInterface $validationErrors
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function postAction(Informer $informer){
+    public function postAction(Informer $informer, ConstraintViolationListInterface $validationErrors){
+
+        if (count($validationErrors) > 0) {
+            $data = [
+                'error' => 'ошибка валидации',
+                'errorMessages' => $validationErrors
+            ];
+            $view = $this->view($data, 400);
+            return $this->handleView($view);
+        }
 
         $entityManager = $this->getDoctrine()->getManager();
 

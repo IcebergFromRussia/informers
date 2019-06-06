@@ -8,6 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Swagger\Annotations as SWG;
 use JMS\Serializer\Annotation\ReadOnly;
 use JMS\Serializer\Annotation as Serializer;
+use App\Constraints as Constraint;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\InformerRepository")
@@ -51,6 +52,10 @@ class Informer
      * @var array
      * @ORM\Column(type="json", length=255)
      * @Serializer\Type("array")
+     * @Constraint\JsonSchema(
+     *     schema = "this.getType().getDataSchema()",
+     *     data = "value"
+     * )
      */
     private $data = [];
 

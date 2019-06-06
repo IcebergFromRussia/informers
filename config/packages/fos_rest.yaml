@@ -6,6 +6,8 @@ fos_rest:
     body_listener: true
     body_converter:
         enabled: true
+        validate: true
+        validation_errors_argument: validationErrors
     allowed_methods_listener:  true
     routing_loader: true
     view:
