@@ -29,4 +29,14 @@ services:
     App\Command\MassageToRabbitCommand:
         arguments:
             $producer: '@old_sound_rabbit_mq.upload_picture_producer'
+    App\Service\RabbitService:
+        arguments:
+            $producer: '@old_sound_rabbit_mq.upload_picture_producer'
+            $entityManager: '@doctrine.orm.default_entity_manager'
+
+    sensio_framework_extra.view.listener:
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+#    App\Service\UserService:
+#        arguments:
+#            - '@doctrine.orm.default_entity_manager'
 
